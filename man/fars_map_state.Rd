@@ -26,7 +26,9 @@ latitude and 90.
 If a state is invalid, an error will display. If there is no accident, a info message will display.
 }
 \examples{
+\dontrun{
 fars_map_state(30, 2018)
 fars_map_state("30","2018")
+}
 
 }

@@ -21,6 +21,9 @@ You can customize which file to be read by using the argument \code{filename}.
 This function will return an error when a file doesn't exist.
 }
 \examples{
+\dontrun{
 fars_read("my_input.csv")
+}
+
 
 }

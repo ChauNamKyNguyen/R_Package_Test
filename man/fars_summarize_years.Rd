@@ -17,7 +17,10 @@ This function summarizes import data by years and months
 You can customize years to read by using the \code{years}.
 }
 \examples{
+\dontrun{
 fars_summarize_years(c(2017:2018))
 fars_summarize_years(c("2017","2018"))
+}
+
 
 }

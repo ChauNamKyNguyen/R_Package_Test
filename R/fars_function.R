@@ -13,7 +13,10 @@
 #' @import dplyr readr
 #'
 #' @examples
+#' \dontrun{
 #' fars_read("my_input.csv")
+#' }
+#'
 #'
 #' @export
 
@@ -63,8 +66,10 @@ make_filename <- function(year) {
 #'
 #'
 #' @examples
+#' \dontrun{
 #' fars_read_years(c(2013:2015))
 #' fars_read_years(c("2013","2015"))
+#' }
 #'
 #' @export
 
@@ -94,8 +99,11 @@ fars_read_years <- function(years) {
 #' @import dplyr tidyr
 #'
 #' @examples
+#' \dontrun{
 #' fars_summarize_years(c(2017:2018))
 #' fars_summarize_years(c("2017","2018"))
+#' }
+#'
 #'
 #' @export
 
@@ -127,8 +135,10 @@ fars_summarize_years <- function(years) {
 #' @import maps graphics
 #'
 #' @examples
+#' \dontrun{
 #' fars_map_state(30, 2018)
 #' fars_map_state("30","2018")
+#' }
 #'
 #' @export
 
