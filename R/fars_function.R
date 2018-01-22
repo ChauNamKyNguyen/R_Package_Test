@@ -10,7 +10,7 @@
 #'
 #' @note This function will return an error when a file doesn't exist.
 #'
-#' @import dyplyr
+#' @import dplyr readr
 #'
 #' @examples
 #' fars_read("my_input.csv")

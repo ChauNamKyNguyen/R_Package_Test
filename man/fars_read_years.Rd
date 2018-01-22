@@ -21,7 +21,7 @@ This function will return an error if file doesn't exist with an error and warni
 The error tells which file doesn't exist, while the warning indicates which year of the vector is invalid.
 }
 \examples{
-fars_read_years(c(2017:2018))
-fars_read_years(c("2017","2018"))
+fars_read_years(c(2013:2015))
+fars_read_years(c("2013","2015"))
 
 }

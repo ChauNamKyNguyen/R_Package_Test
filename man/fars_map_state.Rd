@@ -9,7 +9,7 @@ fars_map_state(state.num, year)
 \arguments{
 \item{state.num}{An integer or string scala of a state code}
 
-\item{year}{An integer scala of a year}
+\item{year}{An integer or string scala of a year}
 }
 \value{
 This NULL for invalid state or year or accident to plot.
