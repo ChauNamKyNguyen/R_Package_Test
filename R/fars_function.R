@@ -37,7 +37,7 @@ fars_read <- function(filename) {
 #'
 #' @param year An integer or string scale giving a year from which the function will create a file name.
 #'
-#' @return This function returns a string.
+#' @return This function returns a full path for a raw data file.
 #'
 #' @examples
 #' make_filename(2018)
@@ -47,7 +47,11 @@ fars_read <- function(filename) {
 
 make_filename <- function(year) {
   year <- as.integer(year)
-  sprintf("accident_%d.csv.bz2", year)
+
+  # UPDATED: https://www.coursera.org/learn/r-packages/discussions/weeks/4/threads/dL-ab2OKEeeT6Aqv2QJASg
+  file <- sprintf("accident_%d.csv.bz2", year)
+  system.file("extdata", file, package = "fars")
+  # END UPDATED
 }
 
 #' Create a list for a vector of years.
@@ -78,8 +82,8 @@ fars_read_years <- function(years) {
     file <- make_filename(year)
     tryCatch({
       dat <- fars_read(file)
-      dplyr::mutate(dat, year = year) %>%
-        dplyr::select(MONTH, year)
+      mutate(dat, year = year) %>%
+        select(MONTH, year)
     }, error = function(e) {
       warning("invalid year: ", year)
       return(NULL)
@@ -136,8 +140,8 @@ fars_summarize_years <- function(years) {
 #'
 #' @examples
 #' \dontrun{
-#' fars_map_state(30, 2018)
-#' fars_map_state("30","2018")
+#' fars_map_state(4, 2013)
+#' fars_map_state("4","2013")
 #' }
 #'
 #' @export
