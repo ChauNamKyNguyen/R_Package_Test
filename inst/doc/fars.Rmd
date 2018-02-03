@@ -1,0 +1,68 @@
+---
+title: "FARS package"
+author: "Chau Nam Ky Nguyen"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+The functions in this pacakage will be using data from the US National Highway Traffic Safety Administration's Fatality Analysis Reporting System, which is a nationwide census providing the American public yearly data regarding fatal injuries suffered in motor vehicle traffic crashes. This package contains following functions:
+
+- make_filename
+- fars_read
+- fars_read_years
+- fars_summarize_years
+- fars_map_state
+
+## Data Info
+
+Data in this package ranges from 2013 to 2015. They are stored in three CSV files:
+
+  * accident_2013.csv.bz2
+  * accident_2014.csv.bz2
+  * accident_2015.csv.bz2
+
+For reading data user can use two functions `make_filename` to create a full path to a raw file, and `fars_read` to read the CSV file into the system.
+
+```{r echo=TRUE}
+library(fars)
+
+file = make_filename(2013)
+data = fars_read(file)
+dim(data)
+```
+
+The data contains `r dim(data)[1]` observations and `r dim(data)[2]` attributes. Attentionally, `fars_read_years` won't return the raw data, instead return the list of dataset for each year containing only two attributes with 12 rows for each month in a year.
+
+```{r echo=TRUE}
+library(fars)
+data = fars_read_years(2013:2014)
+
+data[[1]]
+
+```
+
+
+## Summary accidents in years
+
+To summerize accidents in years, user can use `fars_summarize_years(years)` with `years` that is either an integer vector or a string vector. `years` is valid for only a period ranging from 2013 to 2015.
+
+```{r}
+library(fars)
+fars_summarize_years(2013:2015)
+```
+    
+## Display the accident in a state of a particular year
+
+To plot accidents of a state in a particular year, we will use `fars_map_state(state.num, year)`. `state.num` indicates the number for one state, while `year` indicates which year you want to plot. These arguments must be scala and can be either integer or string.
+
+For an example, to display accident in the state 4 of the year 2013, we can invoke as the below:
+
+```{r, echo=TRUE, results='asis'}
+library(fars)
+fars_map_state("4", "2013")
+```
+

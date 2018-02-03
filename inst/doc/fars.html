@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Chau Nam Ky Nguyen" />
+
+<meta name="date" content="2018-02-03" />
+
+<title>FARS package</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">FARS package</h1>
+<h4 class="author"><em>Chau Nam Ky Nguyen</em></h4>
+<h4 class="date"><em>2018-02-03</em></h4>
+
+
+
+<p>The functions in this pacakage will be using data from the US National Highway Traffic Safety Administration’s Fatality Analysis Reporting System, which is a nationwide census providing the American public yearly data regarding fatal injuries suffered in motor vehicle traffic crashes. This package contains following functions:</p>
+<ul>
+<li>make_filename</li>
+<li>fars_read</li>
+<li>fars_read_years</li>
+<li>fars_summarize_years</li>
+<li>fars_map_state</li>
+</ul>
+<div id="data-info" class="section level2">
+<h2>Data Info</h2>
+<p>Data in this package ranges from 2013 to 2015. They are stored in three CSV files:</p>
+<ul>
+<li>accident_2013.csv.bz2</li>
+<li>accident_2014.csv.bz2</li>
+<li>accident_2015.csv.bz2</li>
+</ul>
+<p>For reading data user can use two functions <code>make_filename</code> to create a full path to a raw file, and <code>fars_read</code> to read the CSV file into the system.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fars)
+
+file =<span class="st"> </span><span class="kw">make_filename</span>(<span class="dv">2013</span>)
+data =<span class="st"> </span><span class="kw">fars_read</span>(file)
+<span class="kw">dim</span>(data)</code></pre></div>
+<pre><code>## [1] 30202    50</code></pre>
+<p>The data contains 30202 observations and 50 attributes. Attentionally, <code>fars_read_years</code> won’t return the raw data, instead return the list of dataset for each year containing only two attributes with 12 rows for each month in a year.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fars)
+data =<span class="st"> </span><span class="kw">fars_read_years</span>(<span class="dv">2013</span>:<span class="dv">2014</span>)</code></pre></div>
+<pre><code>## # A tibble: 30,202 x 50
+##    STATE ST_CASE VE_TOTAL VE_FORMS PVH_INVL  PEDS PERNOTMVIT PERMVIT
+##    &lt;int&gt;   &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;int&gt;      &lt;int&gt;   &lt;int&gt;
+##  1     1   10001        1        1        0     0          0       8
+##  2     1   10002        2        2        0     0          0       2
+##  3     1   10003        1        1        0     0          0       1
+##  4     1   10004        1        1        0     0          0       3
+##  5     1   10005        2        2        0     0          0       3
+##  6     1   10006        2        2        0     0          0       3
+##  7     1   10007        1        1        0     0          0       1
+##  8     1   10008        2        2        0     0          0       2
+##  9     1   10009        1        1        0     0          0       1
+## 10     1   10010        2        2        0     0          0       4
+## # ... with 30,192 more rows, and 42 more variables: PERSONS &lt;int&gt;,
+## #   COUNTY &lt;int&gt;, CITY &lt;int&gt;, DAY &lt;int&gt;, MONTH &lt;int&gt;, YEAR &lt;int&gt;,
+## #   DAY_WEEK &lt;int&gt;, HOUR &lt;int&gt;, MINUTE &lt;int&gt;, NHS &lt;int&gt;, ROAD_FNC &lt;int&gt;,
+## #   ROUTE &lt;int&gt;, TWAY_ID &lt;chr&gt;, TWAY_ID2 &lt;chr&gt;, MILEPT &lt;int&gt;,
+## #   LATITUDE &lt;dbl&gt;, LONGITUD &lt;dbl&gt;, SP_JUR &lt;int&gt;, HARM_EV &lt;int&gt;,
+## #   MAN_COLL &lt;int&gt;, RELJCT1 &lt;int&gt;, RELJCT2 &lt;int&gt;, TYP_INT &lt;int&gt;,
+## #   WRK_ZONE &lt;int&gt;, REL_ROAD &lt;int&gt;, LGT_COND &lt;int&gt;, WEATHER1 &lt;int&gt;,
+## #   WEATHER2 &lt;int&gt;, WEATHER &lt;int&gt;, SCH_BUS &lt;int&gt;, RAIL &lt;chr&gt;,
+## #   NOT_HOUR &lt;int&gt;, NOT_MIN &lt;int&gt;, ARR_HOUR &lt;int&gt;, ARR_MIN &lt;int&gt;,
+## #   HOSP_HR &lt;int&gt;, HOSP_MN &lt;int&gt;, CF1 &lt;int&gt;, CF2 &lt;int&gt;, CF3 &lt;int&gt;,
+## #   FATALS &lt;int&gt;, DRUNK_DR &lt;int&gt;
+## # A tibble: 30,056 x 50
+##    STATE ST_CASE VE_TOTAL VE_FORMS PVH_INVL  PEDS PERNOTMVIT PERMVIT
+##    &lt;int&gt;   &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;int&gt;      &lt;int&gt;   &lt;int&gt;
+##  1     1   10001        1        1        0     0          0       2
+##  2     1   10002        1        1        0     0          0       1
+##  3     1   10003        2        2        0     0          0       7
+##  4     1   10004        3        3        0     0          0       5
+##  5     1   10005        1        1        0     0          0       1
+##  6     1   10006        1        1        0     0          0       1
+##  7     1   10007        3        2        1     0          0       2
+##  8     1   10008        2        2        0     0          0       4
+##  9     1   10009        3        3        0     0          0       5
+## 10     1   10010        2        2        0     0          0       6
+## # ... with 30,046 more rows, and 42 more variables: PERSONS &lt;int&gt;,
+## #   COUNTY &lt;int&gt;, CITY &lt;int&gt;, DAY &lt;int&gt;, MONTH &lt;int&gt;, YEAR &lt;int&gt;,
+## #   DAY_WEEK &lt;int&gt;, HOUR &lt;int&gt;, MINUTE &lt;int&gt;, NHS &lt;int&gt;, ROAD_FNC &lt;int&gt;,
+## #   ROUTE &lt;int&gt;, TWAY_ID &lt;chr&gt;, TWAY_ID2 &lt;chr&gt;, MILEPT &lt;int&gt;,
+## #   LATITUDE &lt;dbl&gt;, LONGITUD &lt;dbl&gt;, SP_JUR &lt;int&gt;, HARM_EV &lt;int&gt;,
+## #   MAN_COLL &lt;int&gt;, RELJCT1 &lt;int&gt;, RELJCT2 &lt;int&gt;, TYP_INT &lt;int&gt;,
+## #   WRK_ZONE &lt;int&gt;, REL_ROAD &lt;int&gt;, LGT_COND &lt;int&gt;, WEATHER1 &lt;int&gt;,
+## #   WEATHER2 &lt;int&gt;, WEATHER &lt;int&gt;, SCH_BUS &lt;int&gt;, RAIL &lt;chr&gt;,
+## #   NOT_HOUR &lt;int&gt;, NOT_MIN &lt;int&gt;, ARR_HOUR &lt;int&gt;, ARR_MIN &lt;int&gt;,
+## #   HOSP_HR &lt;int&gt;, HOSP_MN &lt;int&gt;, CF1 &lt;int&gt;, CF2 &lt;int&gt;, CF3 &lt;int&gt;,
+## #   FATALS &lt;int&gt;, DRUNK_DR &lt;int&gt;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data[[<span class="dv">1</span>]]</code></pre></div>
+<pre><code>## # A tibble: 30,202 x 2
+##    MONTH  year
+##    &lt;int&gt; &lt;int&gt;
+##  1     1  2013
+##  2     1  2013
+##  3     1  2013
+##  4     1  2013
+##  5     1  2013
+##  6     1  2013
+##  7     1  2013
+##  8     1  2013
+##  9     1  2013
+## 10     1  2013
+## # ... with 30,192 more rows</code></pre>
+</div>
+<div id="summary-accidents-in-years" class="section level2">
+<h2>Summary accidents in years</h2>
+<p>To summerize accidents in years, user can use <code>fars_summarize_years(years)</code> with <code>years</code> that is either an integer vector or a string vector. <code>years</code> is valid for only a period ranging from 2013 to 2015.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fars)
+<span class="kw">fars_summarize_years</span>(<span class="dv">2013</span>:<span class="dv">2015</span>)</code></pre></div>
+<pre><code>## # A tibble: 30,202 x 50
+##    STATE ST_CASE VE_TOTAL VE_FORMS PVH_INVL  PEDS PERNOTMVIT PERMVIT
+##    &lt;int&gt;   &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;int&gt;      &lt;int&gt;   &lt;int&gt;
+##  1     1   10001        1        1        0     0          0       8
+##  2     1   10002        2        2        0     0          0       2
+##  3     1   10003        1        1        0     0          0       1
+##  4     1   10004        1        1        0     0          0       3
+##  5     1   10005        2        2        0     0          0       3
+##  6     1   10006        2        2        0     0          0       3
+##  7     1   10007        1        1        0     0          0       1
+##  8     1   10008        2        2        0     0          0       2
+##  9     1   10009        1        1        0     0          0       1
+## 10     1   10010        2        2        0     0          0       4
+## # ... with 30,192 more rows, and 42 more variables: PERSONS &lt;int&gt;,
+## #   COUNTY &lt;int&gt;, CITY &lt;int&gt;, DAY &lt;int&gt;, MONTH &lt;int&gt;, YEAR &lt;int&gt;,
+## #   DAY_WEEK &lt;int&gt;, HOUR &lt;int&gt;, MINUTE &lt;int&gt;, NHS &lt;int&gt;, ROAD_FNC &lt;int&gt;,
+## #   ROUTE &lt;int&gt;, TWAY_ID &lt;chr&gt;, TWAY_ID2 &lt;chr&gt;, MILEPT &lt;int&gt;,
+## #   LATITUDE &lt;dbl&gt;, LONGITUD &lt;dbl&gt;, SP_JUR &lt;int&gt;, HARM_EV &lt;int&gt;,
+## #   MAN_COLL &lt;int&gt;, RELJCT1 &lt;int&gt;, RELJCT2 &lt;int&gt;, TYP_INT &lt;int&gt;,
+## #   WRK_ZONE &lt;int&gt;, REL_ROAD &lt;int&gt;, LGT_COND &lt;int&gt;, WEATHER1 &lt;int&gt;,
+## #   WEATHER2 &lt;int&gt;, WEATHER &lt;int&gt;, SCH_BUS &lt;int&gt;, RAIL &lt;chr&gt;,
+## #   NOT_HOUR &lt;int&gt;, NOT_MIN &lt;int&gt;, ARR_HOUR &lt;int&gt;, ARR_MIN &lt;int&gt;,
+## #   HOSP_HR &lt;int&gt;, HOSP_MN &lt;int&gt;, CF1 &lt;int&gt;, CF2 &lt;int&gt;, CF3 &lt;int&gt;,
+## #   FATALS &lt;int&gt;, DRUNK_DR &lt;int&gt;
+## # A tibble: 30,056 x 50
+##    STATE ST_CASE VE_TOTAL VE_FORMS PVH_INVL  PEDS PERNOTMVIT PERMVIT
+##    &lt;int&gt;   &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;int&gt;      &lt;int&gt;   &lt;int&gt;
+##  1     1   10001        1        1        0     0          0       2
+##  2     1   10002        1        1        0     0          0       1
+##  3     1   10003        2        2        0     0          0       7
+##  4     1   10004        3        3        0     0          0       5
+##  5     1   10005        1        1        0     0          0       1
+##  6     1   10006        1        1        0     0          0       1
+##  7     1   10007        3        2        1     0          0       2
+##  8     1   10008        2        2        0     0          0       4
+##  9     1   10009        3        3        0     0          0       5
+## 10     1   10010        2        2        0     0          0       6
+## # ... with 30,046 more rows, and 42 more variables: PERSONS &lt;int&gt;,
+## #   COUNTY &lt;int&gt;, CITY &lt;int&gt;, DAY &lt;int&gt;, MONTH &lt;int&gt;, YEAR &lt;int&gt;,
+## #   DAY_WEEK &lt;int&gt;, HOUR &lt;int&gt;, MINUTE &lt;int&gt;, NHS &lt;int&gt;, ROAD_FNC &lt;int&gt;,
+## #   ROUTE &lt;int&gt;, TWAY_ID &lt;chr&gt;, TWAY_ID2 &lt;chr&gt;, MILEPT &lt;int&gt;,
+## #   LATITUDE &lt;dbl&gt;, LONGITUD &lt;dbl&gt;, SP_JUR &lt;int&gt;, HARM_EV &lt;int&gt;,
+## #   MAN_COLL &lt;int&gt;, RELJCT1 &lt;int&gt;, RELJCT2 &lt;int&gt;, TYP_INT &lt;int&gt;,
+## #   WRK_ZONE &lt;int&gt;, REL_ROAD &lt;int&gt;, LGT_COND &lt;int&gt;, WEATHER1 &lt;int&gt;,
+## #   WEATHER2 &lt;int&gt;, WEATHER &lt;int&gt;, SCH_BUS &lt;int&gt;, RAIL &lt;chr&gt;,
+## #   NOT_HOUR &lt;int&gt;, NOT_MIN &lt;int&gt;, ARR_HOUR &lt;int&gt;, ARR_MIN &lt;int&gt;,
+## #   HOSP_HR &lt;int&gt;, HOSP_MN &lt;int&gt;, CF1 &lt;int&gt;, CF2 &lt;int&gt;, CF3 &lt;int&gt;,
+## #   FATALS &lt;int&gt;, DRUNK_DR &lt;int&gt;
+## # A tibble: 32,166 x 52
+##    STATE ST_CASE VE_TOTAL VE_FORMS PVH_INVL  PEDS PERNOTMVIT PERMVIT
+##    &lt;int&gt;   &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;int&gt;      &lt;int&gt;   &lt;int&gt;
+##  1     1   10001        1        1        0     0          0       1
+##  2     1   10002        1        1        0     0          0       1
+##  3     1   10003        1        1        0     0          0       2
+##  4     1   10004        1        1        0     0          0       1
+##  5     1   10005        2        2        0     0          0       2
+##  6     1   10006        1        1        0     0          0       2
+##  7     1   10007        1        1        0     0          0       2
+##  8     1   10008        1        1        0     1          1       1
+##  9     1   10009        1        1        0     0          0       1
+## 10     1   10010        2        2        0     0          0       2
+## # ... with 32,156 more rows, and 44 more variables: PERSONS &lt;int&gt;,
+## #   COUNTY &lt;int&gt;, CITY &lt;int&gt;, DAY &lt;int&gt;, MONTH &lt;int&gt;, YEAR &lt;int&gt;,
+## #   DAY_WEEK &lt;int&gt;, HOUR &lt;int&gt;, MINUTE &lt;int&gt;, NHS &lt;int&gt;, RUR_URB &lt;int&gt;,
+## #   FUNC_SYS &lt;int&gt;, RD_OWNER &lt;int&gt;, ROUTE &lt;int&gt;, TWAY_ID &lt;chr&gt;,
+## #   TWAY_ID2 &lt;chr&gt;, MILEPT &lt;int&gt;, LATITUDE &lt;dbl&gt;, LONGITUD &lt;dbl&gt;,
+## #   SP_JUR &lt;int&gt;, HARM_EV &lt;int&gt;, MAN_COLL &lt;int&gt;, RELJCT1 &lt;int&gt;,
+## #   RELJCT2 &lt;int&gt;, TYP_INT &lt;int&gt;, WRK_ZONE &lt;int&gt;, REL_ROAD &lt;int&gt;,
+## #   LGT_COND &lt;int&gt;, WEATHER1 &lt;int&gt;, WEATHER2 &lt;int&gt;, WEATHER &lt;int&gt;,
+## #   SCH_BUS &lt;int&gt;, RAIL &lt;chr&gt;, NOT_HOUR &lt;int&gt;, NOT_MIN &lt;int&gt;,
+## #   ARR_HOUR &lt;int&gt;, ARR_MIN &lt;int&gt;, HOSP_HR &lt;int&gt;, HOSP_MN &lt;int&gt;,
+## #   CF1 &lt;int&gt;, CF2 &lt;int&gt;, CF3 &lt;int&gt;, FATALS &lt;int&gt;, DRUNK_DR &lt;int&gt;</code></pre>
+<pre><code>## # A tibble: 12 x 4
+##    MONTH `2013` `2014` `2015`
+##  * &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;
+##  1     1   2230   2168   2368
+##  2     2   1952   1893   1968
+##  3     3   2356   2245   2385
+##  4     4   2300   2308   2430
+##  5     5   2532   2596   2847
+##  6     6   2692   2583   2765
+##  7     7   2660   2696   2998
+##  8     8   2899   2800   3016
+##  9     9   2741   2618   2865
+## 10    10   2768   2831   3019
+## 11    11   2615   2714   2724
+## 12    12   2457   2604   2781</code></pre>
+</div>
+<div id="display-the-accident-in-a-state-of-a-particular-year" class="section level2">
+<h2>Display the accident in a state of a particular year</h2>
+<p>To plot accidents of a state in a particular year, we will use <code>fars_map_state(state.num, year)</code>. <code>state.num</code> indicates the number for one state, while <code>year</code> indicates which year you want to plot. These arguments must be scala and can be either integer or string.</p>
+<p>For an example, to display accident in the state 4 of the year 2013, we can invoke as the below:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fars)
+<span class="kw">fars_map_state</span>(<span class="st">&quot;4&quot;</span>, <span class="st">&quot;2013&quot;</span>)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
